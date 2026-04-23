@@ -290,7 +290,7 @@
         const idN = `store-n-${index}`, idM = `store-m-${index}`;
         let priceN = (dish.type === 'common' ? 63 : 104);
         let priceM = (dish.type === 'common' ? 98 : 152);
-        if (dish.name === '페페스') { priceN = 123; priceM = 126; }
+        if (dish.name === '페페스') { priceN = 123; priceM = 184; }
 
         tbody.innerHTML += `
             <tr class="no-border">
@@ -353,7 +353,7 @@
             if (!dish.name.includes("주스")) {
                 let pN = (dish.type === 'common' ? 63 : 104);
                 let pM = (dish.type === 'common' ? 92 : 152);
-                if (dish.name === '페페스') { pN = 123; pM = 126; }
+                if (dish.name === '페페스') { pN = 123; pM = 184; }
                 updateRow(`store-n-${i}`, costSilver, pN, repairStore);
                 updateRow(`store-m-${i}`, costSilver, pM, repairStore);
             }
