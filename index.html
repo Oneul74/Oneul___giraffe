@@ -14,6 +14,7 @@
         .reset-master-btn:hover { background: #ff0000; transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
 
         .sub-neon-title { font-weight: bold; color: #fbc727; text-shadow: 0 0 8px rgba(212, 175, 55, 0.6); font-size: 24px; margin: 20px 0 15px 0; }
+        
         .tab-wrapper { display: flex; gap: 10px; margin-bottom: 35px; border-bottom: 3px solid #444; padding-bottom: 20px; justify-content: center; flex-wrap: wrap; }
         .tab-btn { background: #333; border: none; color: #888; padding: 15px 25px; border-radius: 15px; cursor: pointer; font-size: 18px; font-weight: bold; transition: 0.3s; }
         .tab-btn.active { background: #fbc727; color: #1a1a1a; box-shadow: 0 0 15px #fbc727; }
@@ -37,20 +38,42 @@
         .dual-input div { display: flex; flex-direction: column; flex: 1; align-items: center; }
         .dual-input span { font-size: 11px; color: #888; margin-bottom: 3px; }
 
-        input[type="text"], input[type="number"] { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 8px; font-size: 16px; outline: none; text-align: right; width: 100%; box-sizing: border-box; }
-        input:focus { border-color: #fbc727; background: #222; }
+        input[type="text"], input[type="number"], select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 8px; font-size: 16px; outline: none; text-align: right; width: 100%; box-sizing: border-box; }
+        input:focus, select:focus { border-color: #fbc727; background: #222; }
 
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
         
-        .table-scroll { overflow-x: auto; width: 100%; }
-        table { width: 100%; border-collapse: collapse; background: #2d2d2d; border-radius: 20px; margin-top: 20px; min-width: 900px; }
-        th { background: #3d3d3d; color: #fbc727; padding: 18px; font-size: 17px; }
+        .table-scroll { 
+            overflow-y: auto; 
+            max-height: 500px; 
+            width: 100%; 
+            border-radius: 20px;
+            background: #2d2d2d;
+            border: 1px solid #444;
+        }
+
+        .table-scroll::-webkit-scrollbar { width: 8px; }
+        .table-scroll::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
+        .table-scroll::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+        .table-scroll::-webkit-scrollbar-thumb:hover { background: #fbc727; }
+
+        table { width: 100%; border-collapse: collapse; background: #2d2d2d; min-width: 900px; }
+        th { 
+            background: #3d3d3d; 
+            color: #fbc727; 
+            padding: 18px; 
+            font-size: 17px; 
+            position: sticky;
+            top: 0; 
+            z-index: 5;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
         td { padding: 15px; text-align: center; font-size: 18px; border-bottom: 1px solid #3d3d3d; }
         .group-divider { border-bottom: 4px solid #fbc727 !important; } 
         .dish-info { text-align: left; padding-left: 25px; }
-        .recipe-text { font-size: 13px; color: #aaa; margin-top: 5px; display: block; line-height: 1.4; }
+        .recipe-text { font-size: 13px; color: #aaa; margin-top: 5px; display: block; line-height: 1.6; }
+        .grade-sel { width: auto !important; height: 24px; font-size: 11px; padding: 0 5px; margin-left: 5px; background: #333; color: #fbc727; border: 1px solid #555; vertical-align: middle; }
         .badge { font-size: 12px; padding: 3px 8px; border-radius: 6px; margin-right: 8px; font-weight: bold; }
         .b-common { background: #555; color: #eee; }
         .b-uncommon { background: #1e3a2f; color: #46d160; }
@@ -58,8 +81,20 @@
         .profit-pos { color: #46d160; font-weight: bold; }
         .profit-neg { color: #ff4500; font-weight: bold; }
         .top-rank-neon { color: #fff !important; font-weight: bold !important; text-shadow: 0 0 10px #fbc727, 0 0 20px #fbc727 !important; }
-        .apply-btn { font-weight: bold; color: #ffcc00; text-shadow: 0 0 10px #ffcc00; font-size: 20px; cursor: pointer; background: none; border: 2px solid #ffcc00; padding: 5px 15px; border-radius: 10px; margin-left: 20px; transition: 0.3s; }
+        .apply-btn { font-weight: bold; color: #ffcc00; text-shadow: 0 0 10px #ffcc00; font-size: 20px; cursor: pointer; background: none; border: 2px solid #ffcc00; padding: 5px 15px; border-radius: 10px; margin-left: 20px; transition: 0.3s; vertical-align: middle; }
         .apply-btn:hover { background: rgba(255, 204, 0, 0.2); }
+
+        .selector-bar { background: #333; padding: 20px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; border: 1px dashed #fbc727; flex-wrap: wrap; }
+        .market-sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: flex-start; }
+        .sub-tab-btn { background: #444; border: 1px solid #555; color: #aaa; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .sub-tab-btn.active { background: #fbc727; color: #000; font-weight: bold; box-shadow: 0 0 10px #fbc727; }
+        .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; width: 100%; }
+        .compare-card { background: #333; padding: 20px; border-radius: 20px; border-left: 5px solid #fbc727; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .stat-line { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 16px; }
+        .score-cell { font-weight: bold; color: #fbc727; font-size: 18px; }
+        .delete-btn { background: #662222 !important; border: 1px solid #993333 !important; }
+        .delete-btn:hover { background: #882222 !important; }
+        input[type="checkbox"] { width: 22px; height: 22px; accent-color: #fbc727; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -72,9 +107,11 @@
         <button class="tab-btn active" onclick="openTab('settings')">단가 설정</button>
         <button class="tab-btn" onclick="openTab('store-tab')">요리상점 판매</button>
         <button class="tab-btn" onclick="openTab('analysis')">유저 판매</button>
+        <button class="tab-btn" onclick="openTab('market-analysis')">시세 비교</button>
     </div>
 
     <div id="settings" class="tab-content active">
+
         <div class="setting-section">
             <span class="neon-title">🌾 농작물 단가 설정</span>
             <div class="header-controls">
@@ -127,11 +164,25 @@
         </div> 
         <div class="setting-section">
             <span class="neon-title">🍲 커먼 요리</span>
-            <div class="table-scroll"><table><thead><tr><th style="width: 24%;">요리 정보</th><th style="width: 12%;">고정 판매가</th><th style="width: 12%;">원재료 가격</th><th style="width: 16%;">순수익 (1개)</th><th style="width: 16%;">순수익 (32개)</th><th style="width: 16%;">순수익 (64개)</th></tr></thead><tbody id="body-store-common"></tbody></table></div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr><th style="width: 26%;">요리 정보</th><th style="width: 10%;">고정 판매가</th><th style="width: 12%;">원재료 가격</th><th style="width: 16%;">순수익 (1개)</th><th style="width: 16%;">순수익 (32개)</th><th style="width: 16%;">순수익 (64개)</th></tr>
+                    </thead>
+                    <tbody id="body-store-common"></tbody>
+                </table>
+            </div>
         </div>
         <div class="setting-section" style="margin-top: 40px;">
             <span class="neon-title">🥗 언커먼 요리</span>
-            <div class="table-scroll"><table><thead><tr><th style="width: 24%;">요리 정보</th><th style="width: 12%;">고정 판매가</th><th style="width: 13%;">원재료 가격</th><th style="width: 16%;">순수익 (1개)</th><th style="width: 16%;">순수익 (32개)</th><th style="width: 16%;">순수익 (64개)</th></tr></thead><tbody id="body-store-uncommon"></tbody></table></div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr><th style="width: 26%;">요리 정보</th><th style="width: 10%;">고정 판매가</th><th style="width: 13%;">원재료 가격</th><th style="width: 16%;">순수익 (1개)</th><th style="width: 16%;">순수익 (32개)</th><th style="width: 16%;">순수익 (64개)</th></tr>
+                    </thead>
+                    <tbody id="body-store-uncommon"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -144,14 +195,100 @@
             <span style="font-size: 13px; color: #888;">* 노련함 레벨 작성 </span>
         </div>
         <div class="setting-section">
-            <span class="neon-title">🍲 커먼 요리</span>
-            <button class="apply-btn" onclick="highlightTop3('common')">적 용</button>
-            <div class="table-scroll"><table><thead><tr><th style="width: 25%;">요리 정보</th><th style="width: 15%;">판매가</th><th style="width: 15%;">원재료 가격</th><th style="width: 15%;">순수익 (1개)</th><th style="width: 15%;">순수익 (32개)</th><th style="width: 15%;">순수익 (64개)</th></tr></thead><tbody id="body-common"></tbody></table></div>
+            <div style="display:flex; align-items:center; margin-bottom: 15px;">
+                <span class="neon-title" style="margin-bottom:0;">🍲 커먼 요리</span>
+                <button class="apply-btn" onclick="highlightTop1('common')">TOP 3</button>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr><th style="width: 27%;">요리 정보</th><th style="width: 13%;">판매가</th><th style="width: 15%;">원재료 가격</th><th style="width: 15%;">순수익 (1개)</th><th style="width: 15%;">순수익 (32개)</th><th style="width: 15%;">순수익 (64개)</th></tr>
+                    </thead>
+                    <tbody id="body-common"></tbody>
+                </table>
+            </div>
         </div>
         <div class="setting-section" style="margin-top: 40px;">
-            <span class="neon-title">🥗 언커먼 요리</span>
-            <button class="apply-btn" onclick="highlightTop3('uncommon')">적 용</button>
-            <div class="table-scroll"><table><thead><tr><th style="width: 25%;">요리 정보</th><th style="width: 15%;">판매가</th><th style="width: 15%;">원재료 가격</th><th style="width: 15%;">순수익 (1개)</th><th style="width: 15%;">순수익 (32개)</th><th style="width: 15%;">순수익 (64개)</th></tr></thead><tbody id="body-uncommon"></tbody></table></div>
+            <div style="display:flex; align-items:center; margin-bottom: 15px;">
+                <span class="neon-title" style="margin-bottom:0;">🥗 언커먼 요리</span>
+                <button class="apply-btn" onclick="highlightTop1('uncommon')">TOP 3</button>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr><th style="width: 27%;">요리 정보</th><th style="width: 13%;">판매가</th><th style="width: 15%;">원재료 가격</th><th style="width: 15%;">순수익 (1개)</th><th style="width: 15%;">순수익 (32개)</th><th style="width: 15%;">순수익 (64개)</th></tr>
+                    </thead>
+                    <tbody id="body-uncommon"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="market-analysis" class="tab-content">
+        <div class="selector-bar">
+            <strong>🔍 대상 요리 선택:</strong>
+            <select id="main-dish-selector" onchange="syncDish(this.value)" style="flex:1; text-align: left;"></select>
+        </div>
+
+        <div class="market-sub-tabs">
+            <button id="btn-sub-my" class="sub-tab-btn active" onclick="openMarketSubTab('my-tab')">내 판매 관리</button>
+            <button id="btn-sub-market" class="sub-tab-btn" onclick="openMarketSubTab('market-tab')">시장 시세 기록</button>
+            <button id="btn-sub-analysis" class="sub-tab-btn" onclick="openMarketSubTab('analysis-tab')">종합 비교 분석</button>
+        </div>
+
+        <div id="my-tab" class="market-sub-content">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:20%;">요리명</th>
+                            <th style="width:20%;">지속시간</th>
+                            <th style="width:20%;">스탯 수치</th>
+                            <th style="width:20%;">판매가</th>
+                            <th style="width:20%;">효율</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="my-dish-name" style="font-weight:bold; color:#fbc727;">요리를 선택해주세요</td>
+                            <td><input type="number" id="my-dur" oninput="saveMarketData()" class="nav-i" data-row="1000" data-col="0"></td>
+                            <td><input type="number" id="my-stat" oninput="saveMarketData()" class="nav-i" data-row="1000" data-col="1"></td>
+                            <td><input type="number" id="my-price" oninput="saveMarketData()" class="nav-i" data-row="1000" data-col="2"></td>
+                            <td id="my-score" class="score-cell">0.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="market-tab" class="market-sub-content" style="display:none;">
+            <div style="margin:15px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap:10px;">
+                <div style="font-size: 14px; color:#888;">* 체크한 항목만 종합 분석에 포함됩니다.</div>
+                <div style="display:flex; gap:10px; flex-wrap: wrap;">
+                    <button class="icon-btn" onclick="toggleAllCheck(true)">전체 선택</button>
+                    <button class="icon-btn" onclick="toggleAllCheck(false)">전체 해제</button>
+                    <button class="icon-btn delete-btn" onclick="clearSelectedRows()">선택 데이터 지우기</button>
+                </div>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:60px;">선택</th>
+                            <th style="width:20px;">No</th>
+                            <th style="width:22%;">지속시간</th>
+                            <th style="width:22%;">스탯 수치</th>
+                            <th style="width:22%;">판매가</th>
+                            <th style="width:15%;">효율</th>
+                        </tr>
+                    </thead>
+                    <tbody id="market-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="analysis-tab" class="market-sub-content" style="display:none;">
+            <div class="compare-grid" id="analysis-grid"></div>
         </div>
     </div>
 </div>
@@ -187,6 +324,13 @@
         { type: 'uncommon', name: "세비체", ings: { "블루탱": 1, "흰동가리": 1, "레몬": 3, "딸기": 3 } }
     ];
 
+    const dishNames = dishes.map(d => d.name);
+    const ilpunDishes = dishNames
+        .filter(name => name !== "옥수수 착즙 주스" && name !== "무 착즙 주스")
+        .map(d => "일품 " + d);
+    const allMarketDishes = [...dishNames, ...ilpunDishes];
+    let marketDb = JSON.parse(localStorage.getItem('luna_db_v3')) || {};
+
     let repairSettings = { store: false, user: false };
 
     function formatNumber(n) { return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
@@ -210,40 +354,34 @@
             renderStoreGroup(dish, i, 'common', 'body-store-common');
             renderStoreGroup(dish, i, 'uncommon', 'body-store-uncommon');
         });
-        loadData();
-        setupKeyboardNavigation();
-    }
 
-    function setupKeyboardNavigation() {
-        document.addEventListener('keydown', function(e) {
-            const active = document.activeElement;
-            if (active.tagName !== 'INPUT') return;
-
-            const allInputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'))
-                                   .filter(i => i.offsetParent !== null);
-            const index = allInputs.indexOf(active);
-
-            if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
-                e.preventDefault();
-            }
-
-            let nextIdx = -1;
-
-            if (e.key === 'Enter' || e.key === 'ArrowRight') {
-                nextIdx = index + 1;
-            } else if (e.key === 'ArrowLeft') {
-                nextIdx = index - 1;
-            } else if (e.key === 'ArrowUp') {
-                nextIdx = index - 2; 
-            } else if (e.key === 'ArrowDown') {
-                nextIdx = index + 2;
-            }
-
-            if (nextIdx >= 0 && nextIdx < allInputs.length) {
-                allInputs[nextIdx].focus();
-                allInputs[nextIdx].select();
+        const selector = document.getElementById('main-dish-selector');
+        allMarketDishes.forEach(d => {
+            selector.innerHTML += `<option value="${d}">${d}</option>`;
+            if (!marketDb[d]) {
+                marketDb[d] = { 
+                    my: {dur:0, stat:0, price:0}, 
+                    market: Array(20).fill().map(()=>({checked: true, dur:0, stat:0, price:0})) 
+                };
             }
         });
+
+        const mBody = document.getElementById('market-body');
+        for(let i=0; i<20; i++) {
+            mBody.innerHTML += `
+                <tr>
+                    <td><input type="checkbox" class="m-check" data-idx="${i}" onchange="saveMarketData()"></td>
+                    <td>${i+1}</td>
+                    <td><input type="number" class="m-dur nav-i" data-idx="${i}" data-row="${i+1001}" data-col="0" oninput="saveMarketData()"></td>
+                    <td><input type="number" class="m-stat nav-i" data-idx="${i}" data-row="${i+1001}" data-col="1" oninput="saveMarketData()"></td>
+                    <td><input type="number" class="m-price nav-i" data-idx="${i}" data-row="${i+1001}" data-col="2" oninput="saveMarketData()"></td>
+                    <td class="m-score score-cell">0.0</td>
+                </tr>`;
+        }
+        syncDish(allMarketDishes[0]);
+
+        loadData();
+        bindNavigationKeys();
     }
 
     function renderIngInputs(containerId, list) {
@@ -263,20 +401,19 @@
     function renderDishGroup(dish, index, targetType, tbodyId) {
         if (dish.type !== targetType) return;
         const tbody = document.getElementById(tbodyId);
-        const recipeHtml = getRecipeText(dish);
         const idN = `user-n-${index}`, idM = `user-m-${index}`;
         const isJuice = dish.name.includes("주스");
 
         tbody.innerHTML += `
             <tr class="${isJuice ? 'group-divider' : 'no-border'}">
-                <td class="dish-info"><span class="badge b-${dish.type}">${dish.type === 'common' ? '일반' : '고급'}</span> <strong>${dish.name}</strong>${isJuice ? recipeHtml : ''}</td>
+                <td class="dish-info"><span class="badge b-${dish.type}">${dish.type === 'common' ? '일반' : '고급'}</span> <strong>${dish.name}</strong>${getRecipeHtml(dish, 'user-n', index)}</td>
                 <td><input type="text" id="sell-${idN}" placeholder="0" oninput="formatInput(this)"></td>
                 <td><span id="cost-${idN}">0</span></td><td><span id="p1-${idN}">0</span></td><td><span id="p32-${idN}">0</span></td><td><span id="p64-${idN}">0</span></td>
             </tr>`;
         if (!isJuice) {
             tbody.innerHTML += `
                 <tr class="group-divider">
-                    <td class="dish-info"><span class="badge b-master">일품</span> <strong>일품 ${dish.name}</strong>${recipeHtml}</td>
+                    <td class="dish-info"><span class="badge b-master">일품</span> <strong>일품 ${dish.name}</strong>${getRecipeHtml(dish, 'user-m', index)}</td>
                     <td><input type="text" id="sell-${idM}" placeholder="0" oninput="formatInput(this)"></td>
                     <td><span id="cost-${idM}">0</span></td><td><span id="p1-${idM}">0</span></td><td><span id="p32-${idM}">0</span></td><td><span id="p64-${idM}">0</span></td>
                 </tr>`;
@@ -286,30 +423,44 @@
     function renderStoreGroup(dish, index, targetType, tbodyId) {
         if (dish.type !== targetType || dish.name.includes("주스")) return;
         const tbody = document.getElementById(tbodyId);
-        const recipeHtml = getRecipeText(dish);
         const idN = `store-n-${index}`, idM = `store-m-${index}`;
         let priceN = (dish.type === 'common' ? 63 : 104);
-        let priceM = (dish.type === 'common' ? 98 : 152);
+        let priceM = (dish.type === 'common' ? 92 : 152);
         if (dish.name === '페페스') { priceN = 123; priceM = 184; }
 
         tbody.innerHTML += `
             <tr class="no-border">
-                <td class="dish-info"><span class="badge b-${dish.type}">${dish.type === 'common' ? '일반' : '고급'}</span> <strong>${dish.name}</strong></td>
+                <td class="dish-info"><span class="badge b-${dish.type}">${dish.type === 'common' ? '일반' : '고급'}</span> <strong>${dish.name}</strong>${getRecipeHtml(dish, 'store-n', index)}</td>
                 <td><strong style="color:#bbb">${priceN}</strong></td>
                 <td><span id="cost-${idN}">0</span></td><td><span id="p1-${idN}">0</span></td><td><span id="p32-${idN}">0</span></td><td><span id="p64-${idN}">0</span></td>
             </tr>
             <tr class="group-divider">
-                <td class="dish-info"><span class="badge b-master">일품</span> <strong>일품 ${dish.name}</strong>${recipeHtml}</td>
+                <td class="dish-info"><span class="badge b-master">일품</span> <strong>일품 ${dish.name}</strong>${getRecipeHtml(dish, 'store-m', index)}</td>
                 <td><strong style="color:#ffcc00">${priceM}</strong></td>
                 <td><span id="cost-${idM}">0</span></td><td><span id="p1-${idM}">0</span></td><td><span id="p32-${idM}">0</span></td><td><span id="p64-${idM}">0</span></td>
             </tr>`;
     }
 
-    function getRecipeText(dish) {
+    function getRecipeHtml(dish, tabKey, dishIdx) {
         const allCrops = [...ingredients.crops.basic, ...ingredients.crops.unlocked];
         const c = [], f = [];
-        Object.entries(dish.ings).forEach(([n, q]) => { (allCrops.includes(n) ? c : f).push(`${n}(${q})`); });
-        return `<span class="recipe-text">${c.length ? '└ ' + c.join(', ') + '<br>' : ''}${f.length ? '└ ' + f.join(', ') : ''}</span>`;
+        const isUserTab = tabKey.includes('user');
+
+        Object.entries(dish.ings).forEach(([n, q]) => {
+            const selectHtml = `
+                <select id="grade-${tabKey}-${dishIdx}-${n}" class="grade-sel" onchange="saveAndCalc()">
+                    <option value="gold" ${isUserTab ? 'selected' : ''}>금</option>
+                    <option value="silver" ${!isUserTab ? 'selected' : ''}>은</option>
+                </select>`;
+            const itemText = `${n}(${q})${selectHtml}`;
+            if (allCrops.includes(n)) c.push(itemText); else f.push(itemText);
+        });
+
+        return `
+            <span class="recipe-text">
+                ${f.length ? '└ ' + f.join(', ') + '<br>' : ''}
+                ${c.length ? '└ ' + c.join(', ') : ''}
+            </span>`;
     }
 
     function toggleRepair(type, active) {
@@ -321,7 +472,7 @@
 
     function saveAndCalc() {
         const data = {};
-        document.querySelectorAll('input[type="text"], input[type="number"]').forEach(input => {
+        document.querySelectorAll('input[type="text"], input[type="number"], select').forEach(input => {
             const key = input.id || input.dataset.name;
             if(key) data[key] = input.value;
         });
@@ -337,29 +488,31 @@
         const costPerDurability = 500 / 60;
         const profStore = parseInt(document.getElementById('store-proficiency').value) || 0;
         const profUser = parseInt(document.getElementById('user-proficiency').value) || 0;
-        
-        const repairStore = repairSettings.store ? 
-            Math.max(0, (0.4 - (0.003 * profStore))) * costPerDurability : 0;
-        const repairUser = repairSettings.user ? 
-            Math.max(0, (0.4 - (0.003 * profUser))) * costPerDurability : 0;
+
+        const repairStore = repairSettings.store ? Math.max(0, (0.4 - (0.003 * profStore))) * costPerDurability : 0;
+        const repairUser = repairSettings.user ? Math.max(0, (0.4 - (0.003 * profUser))) * costPerDurability : 0;
 
         dishes.forEach((dish, i) => {
-            let costGold = 0, costSilver = 0;
-            Object.entries(dish.ings).forEach(([n, q]) => {
-                costGold += (goldPrices[n] || 0) * q;
-                costSilver += (silverPrices[n] || 0) * q;
-            });
+            const calcDishCost = (tabKey) => {
+                let total = 0;
+                Object.entries(dish.ings).forEach(([n, q]) => {
+                    const grade = document.getElementById(`grade-${tabKey}-${i}-${n}`)?.value || 'silver';
+                    const unitPrice = (grade === 'gold' ? goldPrices[n] : silverPrices[n]) || 0;
+                    total += unitPrice * q;
+                });
+                return total;
+            };
 
             if (!dish.name.includes("주스")) {
                 let pN = (dish.type === 'common' ? 63 : 104);
                 let pM = (dish.type === 'common' ? 92 : 152);
                 if (dish.name === '페페스') { pN = 123; pM = 184; }
-                updateRow(`store-n-${i}`, costSilver, pN, repairStore);
-                updateRow(`store-m-${i}`, costSilver, pM, repairStore);
+                updateRow(`store-n-${i}`, calcDishCost('store-n'), pN, repairStore);
+                updateRow(`store-m-${i}`, calcDishCost('store-m'), pM, repairStore);
             }
 
-            updateRow(`user-n-${i}`, costGold, unformatNumber(document.getElementById(`sell-user-n-${i}`)?.value || 0), repairUser);
-            updateRow(`user-m-${i}`, costGold, unformatNumber(document.getElementById(`sell-user-m-${i}`)?.value || 0), repairUser);
+            updateRow(`user-n-${i}`, calcDishCost('user-n'), unformatNumber(document.getElementById(`sell-user-n-${i}`)?.value || 0), repairUser);
+            updateRow(`user-m-${i}`, calcDishCost('user-m'), unformatNumber(document.getElementById(`sell-user-m-${i}`)?.value || 0), repairUser);
         });
     }
 
@@ -395,8 +548,9 @@
     }
 
     function hardReset() {
-        if(confirm("모든 데이터를 초기화하시겠습니까?")) {
+        if(confirm("모든 데이터를 초기화하시겠습니까? (단가 및 시장 데이터 전체 포함)")) {
             localStorage.removeItem('luna_calc_v2');
+            localStorage.removeItem('luna_db_v3');
             location.reload();
         }
     }
@@ -419,8 +573,8 @@
         event.currentTarget.classList.add('active');
     }
 
-    function highlightTop3(type) {
-        const containerId = type.includes('store') ? `body-${type}` : `body-${type}`;
+    function highlightTop1(type) {
+        const containerId = type === 'common' ? `body-common` : `body-uncommon`;
         const cells = document.querySelectorAll(`#${containerId} [id^="p64-"]`);
         const profits = [];
         cells.forEach(c => {
@@ -430,6 +584,148 @@
         });
         const top3 = [...new Set(profits)].sort((a, b) => b - a).slice(0, 3);
         cells.forEach(c => { if (top3.includes(unformatNumber(c.innerText))) c.classList.add('top-rank-neon'); });
+    }
+
+    function syncDish(dishName) {
+        const data = marketDb[dishName];
+        document.getElementById('my-dish-name').innerText = dishName;
+        document.getElementById('my-dur').value = data.my.dur || '';
+        document.getElementById('my-stat').value = data.my.stat || '';
+        document.getElementById('my-price').value = data.my.price || '';
+        
+        const rows = document.querySelectorAll('#market-body tr');
+        data.market.forEach((m, i) => {
+            rows[i].querySelector('.m-check').checked = (m.checked !== false);
+            rows[i].querySelector('.m-dur').value = m.dur || '';
+            rows[i].querySelector('.m-stat').value = m.stat || '';
+            rows[i].querySelector('.m-price').value = m.price || '';
+        });
+        calculateMarket();
+    }
+
+    function saveMarketData() {
+        const dishName = document.getElementById('main-dish-selector').value;
+        marketDb[dishName].my = {
+            dur: parseFloat(document.getElementById('my-dur').value) || 0,
+            stat: parseFloat(document.getElementById('my-stat').value) || 0,
+            price: parseFloat(document.getElementById('my-price').value) || 0
+        };
+        const rows = document.querySelectorAll('#market-body tr');
+        rows.forEach((row, i) => {
+            marketDb[dishName].market[i] = {
+                checked: row.querySelector('.m-check').checked,
+                dur: parseFloat(row.querySelector('.m-dur').value) || 0,
+                stat: parseFloat(row.querySelector('.m-stat').value) || 0,
+                price: parseFloat(row.querySelector('.m-price').value) || 0
+            };
+        });
+        localStorage.setItem('luna_db_v3', JSON.stringify(marketDb));
+        calculateMarket();
+    }
+
+    function calculateMarket() {
+        const dishName = document.getElementById('main-dish-selector').value;
+        const data = marketDb[dishName];
+        const myScore = (data.my.dur * data.my.stat) / (data.my.price || 1);
+        document.getElementById('my-score').innerText = data.my.price > 0 ? myScore.toFixed(1) : "0.0";
+        const mRows = document.querySelectorAll('#market-body tr');
+        data.market.forEach((m, i) => {
+            const score = (m.dur * m.stat) / (m.price || 1);
+            mRows[i].querySelector('.m-score').innerText = m.price > 0 ? score.toFixed(1) : "0.0";
+        });
+    }
+
+    function clearSelectedRows() {
+        if(!confirm("체크된 항목의 데이터를 지우시겠습니까?")) return;
+        const rows = document.querySelectorAll('#market-body tr');
+        rows.forEach(row => {
+            const cb = row.querySelector('.m-check');
+            if(cb.checked) {
+                row.querySelector('.m-dur').value = '';
+                row.querySelector('.m-stat').value = '';
+                row.querySelector('.m-price').value = '';
+            }
+        });
+        saveMarketData();
+    }
+
+    function renderAnalysis() {
+        const grid = document.getElementById('analysis-grid');
+        grid.innerHTML = '';
+        allMarketDishes.forEach(d => {
+            const data = marketDb[d];
+            const myScore = (data.my.dur * data.my.stat) / (data.my.price || 1);
+            const mScores = data.market
+                .filter(m => m.checked && m.price > 0)
+                .map(m => (m.dur * m.stat) / m.price);
+                
+            const bestM = mScores.length > 0 ? Math.max(...mScores) : 0;
+            const avgM = mScores.length > 0 ? (mScores.reduce((a,b)=>a+b,0)/mScores.length) : 0;
+            
+            if (myScore > 0 || bestM > 0) {
+                const diff = myScore - bestM;
+                grid.innerHTML += `
+                    <div class="compare-card">
+                        <strong style="color:#fbc727; font-size:18px;">${d}</strong>
+                        <div style="margin-top:15px;">
+                            <div class="stat-line"><span>판매 요리 효율:</span> <strong>${myScore.toFixed(1)}</strong></div>
+                            <div class="stat-line"><span>시장 최고 효율:</span> <strong>${bestM.toFixed(1)}</strong></div>
+                            <div class="stat-line"><span>시장 평균 효율:</span> <strong>${avgM.toFixed(1)}</strong></div>
+                            <hr style="border:0; border-top:1px solid #444; margin: 10px 0;">
+                            <div class="stat-line">
+                                <span>시장 최고 효율 - 내 효율 비교</span>
+                                <span style="font-weight:bold; color:${diff>=0?'#46d160':'#ff4500'}">${diff >= 0 ? '+' : ''}${diff.toFixed(1)}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+        });
+        if(grid.innerHTML === '') grid.innerHTML = '<div style="color:#888; text-align:center; width:100%;">분석할 데이터가 없습니다.</div>';
+    }
+
+    function toggleAllCheck(isSelected) {
+        document.querySelectorAll('.m-check').forEach(cb => cb.checked = isSelected);
+        saveMarketData();
+    }
+
+    function openMarketSubTab(id) {
+        document.querySelectorAll('.market-sub-content').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.sub-tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).style.display = 'block';
+        event.currentTarget.classList.add('active');
+        if(id === 'analysis-tab') renderAnalysis();
+    }
+
+    function bindNavigationKeys() {
+        document.addEventListener('keydown', (e) => {
+            const target = e.target;
+            if(!target.classList.contains('nav-i') && target.type !== 'number' && target.type !== 'text') return;
+            
+            let row = parseInt(target.dataset.row) || 0;
+            let col = parseInt(target.dataset.col) || 0;
+            let nextTarget;
+
+            switch(e.key) {
+                case 'ArrowUp': 
+                    e.preventDefault();
+                    nextTarget = document.querySelector(`[data-row="${row - 1}"][data-col="${col}"]`); 
+                    break;
+                case 'ArrowDown': 
+                    e.preventDefault();
+                    nextTarget = document.querySelector(`[data-row="${row + 1}"][data-col="${col}"]`); 
+                    break;
+                case 'ArrowLeft': 
+                    nextTarget = document.querySelector(`[data-row="${row}"][data-col="${col - 1}"]`); 
+                    break;
+                case 'ArrowRight':
+                case 'Enter':
+                    e.preventDefault();
+                    nextTarget = document.querySelector(`[data-row="${row}"][data-col="${col + 1}"]`);
+                    if (!nextTarget) nextTarget = document.querySelector(`[data-row="${row + 1}"][data-col="0"]`);
+                    break;
+            }
+            if (nextTarget) nextTarget.focus();
+        });
     }
 
     window.onload = init;
