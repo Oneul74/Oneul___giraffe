@@ -424,9 +424,9 @@
         if (dish.type !== targetType || dish.name.includes("주스")) return;
         const tbody = document.getElementById(tbodyId);
         const idN = `store-n-${index}`, idM = `store-m-${index}`;
-        let priceN = (dish.type === 'common' ? 63 : 104);
-        let priceM = (dish.type === 'common' ? 92 : 152);
-        if (dish.name === '페페스') { priceN = 123; priceM = 184; }
+        let priceN = (dish.type === 'common' ? 69 : 109);
+        let priceM = (dish.type === 'common' ? 95 : 167);
+        if (dish.name === '페페스') { priceN = 128; priceM = 200; }
 
         tbody.innerHTML += `
             <tr class="no-border">
@@ -504,9 +504,9 @@
             };
 
             if (!dish.name.includes("주스")) {
-                let pN = (dish.type === 'common' ? 63 : 104);
-                let pM = (dish.type === 'common' ? 92 : 152);
-                if (dish.name === '페페스') { pN = 123; pM = 184; }
+                let pN = (dish.type === 'common' ? 69 : 109);
+                let pM = (dish.type === 'common' ? 95 : 167);
+                if (dish.name === '페페스') { pN = 128; pM = 200; }
                 updateRow(`store-n-${i}`, calcDishCost('store-n'), pN, repairStore);
                 updateRow(`store-m-${i}`, calcDishCost('store-m'), pM, repairStore);
             }
