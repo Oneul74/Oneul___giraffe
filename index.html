@@ -108,6 +108,8 @@
         <button class="tab-btn" onclick="openTab('store-tab')">요리상점 판매</button>
         <button class="tab-btn" onclick="openTab('analysis')">유저 판매</button>
         <button class="tab-btn" onclick="openTab('market-analysis')">시세 비교</button>
+        <button class="tab-btn" onclick="openTab('inventory-tab')">재고 입력</button>
+        <button class="tab-btn" onclick="openTab('fridge-tab'); calculateFridge();">냉털</button>
     </div>
 
     <div id="settings" class="tab-content active">
@@ -291,6 +293,62 @@
             <div class="compare-grid" id="analysis-grid"></div>
         </div>
     </div>
+
+    <div id="inventory-tab" class="tab-content">
+        <div class="setting-section">
+            <span class="neon-title">🌾 농작물 재고 입력</span>
+            <div class="header-controls"><span class="sub-neon-title">[기본 작물]</span></div>
+            <div class="price-grid" id="inv-crop-basic"></div>
+
+            <div class="header-controls"><span class="sub-neon-title">[해금 작물]</span></div>
+            <div class="price-grid" id="inv-crop-unlocked"></div>
+        </div>
+        <div class="setting-section">
+            <span class="neon-title">🐟 물고기 재고 입력</span>
+            <div class="header-controls"><span class="sub-neon-title">[기본 물고기]</span></div>
+            <div class="price-grid" id="inv-fish-basic"></div>
+
+            <div class="header-controls"><span class="sub-neon-title">[해금 물고기]</span></div>
+            <div class="price-grid" id="inv-fish-unlocked"></div>
+        </div>
+    </div>
+
+    <div id="fridge-tab" class="tab-content">
+        <div class="setting-section">
+            <span class="neon-title">🍲 커먼 요리 냉털</span>
+            <div style="font-size: 14px; color: #888; margin-bottom: 20px;">
+                * 요리 등급별 재고 보유량을 기반으로 최대 제작 가능 개수 계산
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 32%;">요리</th>
+                            <th style="width: 43%;">재료 등급별 재고</th>
+                            <th style="width: 25%;">제작 가능 수량</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body-fridge-common"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="setting-section" style="margin-top: 40px;">
+            <span class="neon-title">🥗 언커먼 요리 냉털</span>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 32%;">요리</th>
+                            <th style="width: 43%;">재료 등급별 재고</th>
+                            <th style="width: 25%;">제작 가능 수량</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body-fridge-uncommon"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -319,7 +377,7 @@
         { type: 'uncommon', name: "양장피", ings: { "푸른 해파리": 1, "뱀장어": 1, "무": 3, "양배추": 3 } },
         { type: 'uncommon', name: "에스카베체", ings: { "강꼬치고기": 1, "금붕어": 1, "레몬": 3, "석류": 3 } },
         { type: 'uncommon', name: "부야베스", ings: { "적색통돔": 1, "아귀": 1, "토마토": 3, "석류": 3 } },
-        { type: 'uncommon', name: "치오피노", ings: { "다랑어": 1, "랍스터": 1, "토마토": 3, "파인애플": 3 } },
+        { type: 'uncommon', name: "치오피노", ings: { "다랑어": 1, "랍스터": 1, "토마토": 3, "파인애플": 3, } },
         { type: 'uncommon', name: "파에야", ings: { "농어": 1, "숭어": 1, "토마토": 3, "옥수수": 3 } },
         { type: 'uncommon', name: "세비체", ings: { "블루탱": 1, "흰동가리": 1, "레몬": 3, "딸기": 3 } }
     ];
@@ -348,11 +406,18 @@
         renderIngInputs('fish-basic', ingredients.fish.basic);
         renderIngInputs('fish-unlocked', ingredients.fish.unlocked);
         
+        renderInventoryFields('inv-crop-basic', ingredients.crops.basic);
+        renderInventoryFields('inv-crop-unlocked', ingredients.crops.unlocked);
+        renderInventoryFields('inv-fish-basic', ingredients.fish.basic);
+        renderInventoryFields('inv-fish-unlocked', ingredients.fish.unlocked);
+
         dishes.forEach((dish, i) => {
             renderDishGroup(dish, i, 'common', 'body-common');
             renderDishGroup(dish, i, 'uncommon', 'body-uncommon');
             renderStoreGroup(dish, i, 'common', 'body-store-common');
             renderStoreGroup(dish, i, 'uncommon', 'body-store-uncommon');
+            renderFridgeGroup(dish, i, 'common', 'body-fridge-common');
+            renderFridgeGroup(dish, i, 'uncommon', 'body-fridge-uncommon');
         });
 
         const selector = document.getElementById('main-dish-selector');
@@ -381,6 +446,7 @@
         syncDish(allMarketDishes[0]);
 
         loadData();
+        calculateFridge(); 
         bindNavigationKeys();
     }
 
@@ -393,6 +459,28 @@
                     <div class="dual-input">
                         <div><span>금별</span><input type="text" class="ing-input gold" data-name="gold-${name}" placeholder="0" oninput="formatInput(this)"></div>
                         <div><span>은별</span><input type="text" class="ing-input silver" data-name="silver-${name}" placeholder="0" oninput="formatInput(this)"></div>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function renderInventoryFields(containerId, list) {
+        const container = document.getElementById(containerId);
+        list.forEach(name => {
+            container.innerHTML += `
+                <div class="price-box">
+                    <label>${name}</label>
+                    <div style="display: flex; flex-direction: column; gap: 6px; width: 100%;">
+                        <div style="display: flex; align-items: center; gap: 6px; width: 100%;">
+                            <span style="font-size: 12px; color: #fbc727; min-width: 30px; text-align: left;">금</span>
+                            <input type="number" id="inv-shulker-gold-${name}" class="inv-i" placeholder="셜커" oninput="saveAndCalc()" style="text-align: right; flex: 1;">
+                            <input type="number" id="inv-stack-gold-${name}" class="inv-i" placeholder="세트" oninput="saveAndCalc()" style="text-align: right; flex: 1;">
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px; width: 100%;">
+                            <span style="font-size: 12px; color: #aaa; min-width: 30px; text-align: left;">은</span>
+                            <input type="number" id="inv-shulker-silver-${name}" class="inv-i" placeholder="셜커" oninput="saveAndCalc()" style="text-align: right; flex: 1;">
+                            <input type="number" id="inv-stack-silver-${name}" class="inv-i" placeholder="세트" oninput="saveAndCalc()" style="text-align: right; flex: 1;">
+                        </div>
                     </div>
                 </div>`;
         });
@@ -437,20 +525,39 @@
             <tr class="group-divider">
                 <td class="dish-info"><span class="badge b-master">일품</span> <strong>일품 ${dish.name}</strong>${getRecipeHtml(dish, 'store-m', index)}</td>
                 <td><strong style="color:#ffcc00">${priceM}</strong></td>
-                <td><span id="cost-${idM}">0</span></td><td><span id="p1-${idM}">0</span></td><td><span id="p32-${idM}">0</span></td><td><span id="p64-${idM}">0</span></td>
+                <td><span id="cost-${idM}">0</span></td><td><span id="p1-${idM}">0</span></td><td><span id="p64-${idM}">0</span></td>
+            </tr>`;
+    }
+
+    function renderFridgeGroup(dish, index, targetType, tbodyId) {
+        if (dish.type !== targetType) return;
+        const tbody = document.getElementById(tbodyId);
+        const isJuice = dish.name.includes("주스");
+
+        tbody.innerHTML += `
+            <tr class="${isJuice ? 'group-divider' : 'no-border'}">
+                <td class="dish-info">
+                    <span class="badge b-${dish.type}">${dish.type === 'common' ? '일반' : '고급'}</span> 
+                    <strong>${dish.name}</strong>
+                    ${getRecipeHtml(dish, 'fridge', index)}
+                </td>
+                <td id="fridge-ing-details-${index}" style="text-align: left; font-size: 14px; color: #aaa; line-height: 1.6; padding-left: 20px;"></td>
+                <td>
+                    <strong id="fridge-max-${index}" style="font-size: 21px; color: #888;">0개</strong>
+                </td>
             </tr>`;
     }
 
     function getRecipeHtml(dish, tabKey, dishIdx) {
         const allCrops = [...ingredients.crops.basic, ...ingredients.crops.unlocked];
         const c = [], f = [];
-        const isUserTab = tabKey.includes('user');
+        const isCustomTab = tabKey.includes('user') || tabKey.includes('fridge');
 
         Object.entries(dish.ings).forEach(([n, q]) => {
             const selectHtml = `
                 <select id="grade-${tabKey}-${dishIdx}-${n}" class="grade-sel" onchange="saveAndCalc()">
-                    <option value="gold" ${isUserTab ? 'selected' : ''}>금</option>
-                    <option value="silver" ${!isUserTab ? 'selected' : ''}>은</option>
+                    <option value="gold" ${isCustomTab ? 'selected' : ''}>금</option>
+                    <option value="silver" ${!isCustomTab ? 'selected' : ''}>은</option>
                 </select>`;
             const itemText = `${n}(${q})${selectHtml}`;
             if (allCrops.includes(n)) c.push(itemText); else f.push(itemText);
@@ -506,13 +613,55 @@
             if (!dish.name.includes("주스")) {
                 let pN = (dish.type === 'common' ? 69 : 109);
                 let pM = (dish.type === 'common' ? 95 : 167);
-                if (dish.name === '페페스') { pN = 128; pM = 200; }
+                if (dish.name === '페페스') { priceN = 128; priceM = 200; }
                 updateRow(`store-n-${i}`, calcDishCost('store-n'), pN, repairStore);
                 updateRow(`store-m-${i}`, calcDishCost('store-m'), pM, repairStore);
             }
 
             updateRow(`user-n-${i}`, calcDishCost('user-n'), unformatNumber(document.getElementById(`sell-user-n-${i}`)?.value || 0), repairUser);
             updateRow(`user-m-${i}`, calcDishCost('user-m'), unformatNumber(document.getElementById(`sell-user-m-${i}`)?.value || 0), repairUser);
+        });
+
+        if (typeof calculateFridge === 'function') calculateFridge();
+    }
+
+    function calculateFridge() {
+        dishes.forEach((dish, i) => {
+            const maxEl = document.getElementById(`fridge-max-${i}`);
+            const detailsEl = document.getElementById(`fridge-ing-details-${i}`);
+            if (!maxEl || !detailsEl) return;
+
+            let maxPossible = Infinity;
+            let ingredientDetails = [];
+
+            Object.entries(dish.ings).forEach(([ingName, reqQty]) => {
+                const grade = document.getElementById(`grade-fridge-${i}-${ingName}`)?.value || 'silver';
+                
+                let totalQty = 0;
+                if (grade === 'gold') {
+                    const sGold = parseFloat(document.getElementById(`inv-shulker-gold-${ingName}`)?.value) || 0;
+                    const stGold = parseFloat(document.getElementById(`inv-stack-gold-${ingName}`)?.value) || 0;
+                    totalQty = (sGold * 1728) + (stGold * 64);
+                } else {
+                    const sSilver = parseFloat(document.getElementById(`inv-shulker-silver-${ingName}`)?.value) || 0;
+                    const stSilver = parseFloat(document.getElementById(`inv-stack-silver-${ingName}`)?.value) || 0;
+                    totalQty = (sSilver * 1728) + (stSilver * 64);
+                }
+
+                const possible = Math.floor(totalQty / reqQty);
+                if (possible < maxPossible) {
+                    maxPossible = possible;
+                }
+                
+                const gradeText = grade === 'gold' ? '<span style="color:#fbc727;">금별</span>' : '<span style="color:#aaa;">은별</span>';
+                ingredientDetails.push(`${ingName}(${reqQty}개) [${gradeText} 보유: ${formatNumber(totalQty)}개]`);
+            });
+
+            if (maxPossible === Infinity) maxPossible = 0;
+            
+            detailsEl.innerHTML = ingredientDetails.join('<br>');
+            maxEl.innerText = formatNumber(maxPossible) + "개";
+            maxEl.style.color = maxPossible > 0 ? '#46d160' : '#888';
         });
     }
 
@@ -699,6 +848,17 @@
     function bindNavigationKeys() {
         document.addEventListener('keydown', (e) => {
             const target = e.target;
+            
+            if (e.key === 'Enter' && target.classList.contains('inv-i')) {
+                e.preventDefault();
+                const invInputs = Array.from(document.querySelectorAll('.inv-i'));
+                const idx = invInputs.indexOf(target);
+                if (idx >= 0 && idx < invInputs.length - 1) {
+                    invInputs[idx + 1].focus();
+                }
+                return;
+            }
+
             if(!target.classList.contains('nav-i') && target.type !== 'number' && target.type !== 'text') return;
             
             let row = parseInt(target.dataset.row) || 0;
@@ -707,21 +867,33 @@
 
             switch(e.key) {
                 case 'ArrowUp': 
-                    e.preventDefault();
-                    nextTarget = document.querySelector(`[data-row="${row - 1}"][data-col="${col}"]`); 
+                    if (target.classList.contains('nav-i')) {
+                        e.preventDefault();
+                        nextTarget = document.querySelector(`[data-row="${row - 1}"][data-col="${col}"]`); 
+                    }
                     break;
                 case 'ArrowDown': 
-                    e.preventDefault();
-                    nextTarget = document.querySelector(`[data-row="${row + 1}"][data-col="${col}"]`); 
+                    if (target.classList.contains('nav-i')) {
+                        e.preventDefault();
+                        nextTarget = document.querySelector(`[data-row="${row + 1}"][data-col="${col}"]`); 
+                    }
                     break;
                 case 'ArrowLeft': 
-                    nextTarget = document.querySelector(`[data-row="${row}"][data-col="${col - 1}"]`); 
+                    if (target.classList.contains('nav-i')) {
+                        nextTarget = document.querySelector(`[data-row="${row}"][data-col="${col - 1}"]`); 
+                    }
                     break;
                 case 'ArrowRight':
+                    if (target.classList.contains('nav-i')) {
+                        nextTarget = document.querySelector(`[data-row="${row}"][data-col="${col + 1}"]`);
+                    }
+                    break;
                 case 'Enter':
-                    e.preventDefault();
-                    nextTarget = document.querySelector(`[data-row="${row}"][data-col="${col + 1}"]`);
-                    if (!nextTarget) nextTarget = document.querySelector(`[data-row="${row + 1}"][data-col="0"]`);
+                    if (target.classList.contains('nav-i')) {
+                        e.preventDefault();
+                        nextTarget = document.querySelector(`[data-row="${row}"][data-col="${col + 1}"]`);
+                        if (!nextTarget) nextTarget = document.querySelector(`[data-row="${row + 1}"][data-col="0"]`);
+                    }
                     break;
             }
             if (nextTarget) nextTarget.focus();
