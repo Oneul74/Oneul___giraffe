@@ -78,6 +78,7 @@
         .b-common { background: #555; color: #eee; }
         .b-uncommon { background: #1e3a2f; color: #46d160; }
         .b-master { background: #4a3a1e; color: #ffcc00; border: 1px solid #ffcc00; }
+        .b-special { background: #4a1e6d; color: #d896ff; border: 1px solid #d896ff; }
         .profit-pos { color: #46d160; font-weight: bold; }
         .profit-neg { color: #ff4500; font-weight: bold; }
         .top-rank-neon { color: #fff !important; font-weight: bold !important; text-shadow: 0 0 10px #fbc727, 0 0 20px #fbc727 !important; }
@@ -113,7 +114,6 @@
     </div>
 
     <div id="settings" class="tab-content active">
-
         <div class="setting-section">
             <span class="neon-title">🌾 농작물 단가 설정</span>
             <div class="header-controls">
@@ -316,9 +316,7 @@
     <div id="fridge-tab" class="tab-content">
         <div class="setting-section">
             <span class="neon-title">🍲 커먼 요리 냉털</span>
-            <div style="font-size: 14px; color: #888; margin-bottom: 20px;">
-
-            </div>
+            <div style="font-size: 14px; color: #888; margin-bottom: 20px;"></div>
             <div class="table-scroll">
                 <table>
                     <thead>
@@ -371,15 +369,15 @@
         { type: 'common', name: "무조림", ings: { "잉어": 1, "무": 2, "양배추": 2 } },
         { type: 'common', name: "옥수수 착즙 주스", ings: { "옥수수": 1, "상추": 1 } },
         { type: 'common', name: "무 착즙 주스", ings: { "무": 2, "양배추": 2 } },
-        { type: 'uncommon', name: "페페스", ings: { "개복치": 1, "줄돔": 1, "습지 개구리": 1, "바나나": 3, "토마토": 3 } },
-        { type: 'uncommon', name: "해산물그릴플래터", ings: { "만타 가오리": 1, "문어": 1, "파인애플": 3, "오렌지": 3 } },
-        { type: 'uncommon', name: "데리야끼", ings: { "연어": 1, "철갑상어": 1, "파인애플": 3, "오렌지": 3 } },
-        { type: 'uncommon', name: "양장피", ings: { "푸른 해파리": 1, "뱀장어": 1, "무": 3, "양배추": 3 } },
-        { type: 'uncommon', name: "에스카베체", ings: { "강꼬치고기": 1, "금붕어": 1, "레몬": 3, "석류": 3 } },
-        { type: 'uncommon', name: "부야베스", ings: { "적색통돔": 1, "아귀": 1, "토마토": 3, "석류": 3 } },
-        { type: 'uncommon', name: "치오피노", ings: { "다랑어": 1, "랍스터": 1, "토마토": 3, "파인애플": 3, } },
-        { type: 'uncommon', name: "파에야", ings: { "농어": 1, "숭어": 1, "토마토": 3, "옥수수": 3 } },
-        { type: 'uncommon', name: "세비체", ings: { "블루탱": 1, "흰동가리": 1, "레몬": 3, "딸기": 3 } }
+        { type: 'uncommon', name: "페페스", ings: { "개복치": 1, "줄돔": 1, "습지 개구리": 1, "바나나": 5, "토마토": 5 } },
+        { type: 'uncommon', name: "해산물그릴플래터", ings: { "만타 가오리": 1, "문어": 1, "파인애플": 5, "오렌지": 5 } },
+        { type: 'uncommon', name: "데리야끼", ings: { "연어": 1, "철갑상어": 1, "파인애플": 5, "오렌지": 5 } },
+        { type: 'uncommon', name: "양장피", ings: { "푸른 해파리": 1, "뱀장어": 1, "무": 5, "양배추": 5 } },
+        { type: 'uncommon', name: "에스카베체", ings: { "강꼬치고기": 1, "금붕어": 1, "레몬": 5, "석류": 5 } },
+        { type: 'uncommon', name: "부야베스", ings: { "적색통돔": 1, "아귀": 1, "토마토": 5, "석류": 5 } },
+        { type: 'uncommon', name: "치오피노", ings: { "다랑어": 1, "랍스터": 1, "토마토": 5, "파인애플": 5, } },
+        { type: 'uncommon', name: "파에야", ings: { "농어": 1, "숭어": 1, "토마토": 5, "옥수수": 5 } },
+        { type: 'uncommon', name: "세비체", ings: { "블루탱": 1, "흰동가리": 1, "레몬": 5, "딸기": 5 } }
     ];
 
     const dishNames = dishes.map(d => d.name);
@@ -389,7 +387,7 @@
     const allMarketDishes = [...dishNames, ...ilpunDishes];
     let marketDb = JSON.parse(localStorage.getItem('luna_db_v3')) || {};
 
-    let repairSettings = { store: false, user: false };
+    let repairSettings = JSON.parse(localStorage.getItem('luna_repair_settings')) || { store: false, user: false };
 
     function formatNumber(n) { return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
     function unformatNumber(s) { return parseInt(String(s).replace(/,/g, "")) || 0; }
@@ -419,6 +417,11 @@
             renderFridgeGroup(dish, i, 'common', 'body-fridge-common');
             renderFridgeGroup(dish, i, 'uncommon', 'body-fridge-uncommon');
         });
+
+        document.getElementById('store-repair-on').classList.toggle('active', repairSettings.store);
+        document.getElementById('store-repair-off').classList.toggle('active', !repairSettings.store);
+        document.getElementById('user-repair-on').classList.toggle('active', repairSettings.user);
+        document.getElementById('user-repair-off').classList.toggle('active', !repairSettings.user);
 
         const selector = document.getElementById('main-dish-selector');
         allMarketDishes.forEach(d => {
@@ -491,6 +494,7 @@
         const tbody = document.getElementById(tbodyId);
         const idN = `user-n-${index}`, idM = `user-m-${index}`;
         const isJuice = dish.name.includes("주스");
+        const isFixed = (dish.type === 'uncommon');
 
         tbody.innerHTML += `
             <tr class="${isJuice ? 'group-divider' : 'no-border'}">
@@ -501,7 +505,7 @@
         if (!isJuice) {
             tbody.innerHTML += `
                 <tr class="group-divider">
-                    <td class="dish-info"><span class="badge b-master">일품</span> <strong>일품 ${dish.name}</strong>${getRecipeHtml(dish, 'user-m', index)}</td>
+                    <td class="dish-info"><span class="badge b-master">일품</span> <strong>일품 ${dish.name}</strong>${getRecipeHtml(dish, 'user-m', index, isFixed)}</td>
                     <td><input type="text" id="sell-${idM}" placeholder="0" oninput="formatInput(this)"></td>
                     <td><span id="cost-${idM}">0</span></td><td><span id="p1-${idM}">0</span></td><td><span id="p32-${idM}">0</span></td><td><span id="p64-${idM}">0</span></td>
                 </tr>`;
@@ -511,10 +515,18 @@
     function renderStoreGroup(dish, index, targetType, tbodyId) {
         if (dish.type !== targetType || dish.name.includes("주스")) return;
         const tbody = document.getElementById(tbodyId);
-        const idN = `store-n-${index}`, idM = `store-m-${index}`;
-        let priceN = (dish.type === 'common' ? 69 : 109);
-        let priceM = (dish.type === 'common' ? 95 : 167);
-        if (dish.name === '페페스') { priceN = 128; priceM = 200; }
+        const idN = `store-n-${index}`, idM = `store-m-${index}`, idS = `store-s-${index}`;
+        const isFixed = (dish.type === 'uncommon');
+        
+        let priceN = (dish.type === 'common' ? 80 : 171);
+        let priceM = (dish.type === 'common' ? 120 : 253);
+        let priceS = 274;
+        
+        if (dish.name === '페페스') { 
+            priceN = 196; 
+            priceM = 294; 
+            priceS = 315; 
+        }
 
         tbody.innerHTML += `
             <tr class="no-border">
@@ -522,11 +534,20 @@
                 <td><strong style="color:#bbb">${priceN}</strong></td>
                 <td><span id="cost-${idN}">0</span></td><td><span id="p1-${idN}">0</span></td><td><span id="p32-${idN}">0</span></td><td><span id="p64-${idN}">0</span></td>
             </tr>
-            <tr class="group-divider">
-                <td class="dish-info"><span class="badge b-master">일품</span> <strong>일품 ${dish.name}</strong>${getRecipeHtml(dish, 'store-m', index)}</td>
+            <tr class="${dish.type === 'uncommon' ? 'no-border' : 'group-divider'}">
+                <td class="dish-info"><span class="badge b-master">일품</span> <strong>일품 ${dish.name}</strong>${getRecipeHtml(dish, 'store-m', index, isFixed)}</td>
                 <td><strong style="color:#ffcc00">${priceM}</strong></td>
                 <td><span id="cost-${idM}">0</span></td><td><span id="p1-${idM}">0</span></td><td><span id="p32-${idM}">0</span></td><td><span id="p64-${idM}">0</span></td>
             </tr>`;
+
+        if (dish.type === 'uncommon') {
+            tbody.innerHTML += `
+            <tr class="group-divider">
+                <td class="dish-info"><span class="badge b-special">특급</span> <strong style="color:#d896ff;">특급 ${dish.name}</strong>${getRecipeHtml(dish, 'store-s', index, true)}</td>
+                <td><strong style="color:#d896ff;">${priceS}</strong></td>
+                <td><span id="cost-${idS}">0</span></td><td><span id="p1-${idS}">0</span></td><td><span id="p32-${idS}">0</span></td><td><span id="p64-${idS}">0</span></td>
+            </tr>`;
+        }
     }
 
     function renderFridgeGroup(dish, index, targetType, tbodyId) {
@@ -548,17 +569,24 @@
             </tr>`;
     }
 
-    function getRecipeHtml(dish, tabKey, dishIdx) {
+    function getRecipeHtml(dish, tabKey, dishIdx, isFixedGold = false) {
         const allCrops = [...ingredients.crops.basic, ...ingredients.crops.unlocked];
         const c = [], f = [];
         const isCustomTab = tabKey.includes('user') || tabKey.includes('fridge');
 
         Object.entries(dish.ings).forEach(([n, q]) => {
-            const selectHtml = `
-                <select id="grade-${tabKey}-${dishIdx}-${n}" class="grade-sel" onchange="saveAndCalc()">
-                    <option value="gold" ${isCustomTab ? 'selected' : ''}>금</option>
-                    <option value="silver" ${!isCustomTab ? 'selected' : ''}>은</option>
-                </select>`;
+            let selectHtml = "";
+            if (isFixedGold) {
+                selectHtml = `
+                    <span style="display:inline-block; height: 18px; line-height: 18px; font-size: 11px; padding: 0 5px; margin-left: 5px; background: #333; color: #fbc727; border: 1px solid #555; border-radius: 3px; vertical-align: middle;">금</span>
+                    <input type="hidden" id="grade-${tabKey}-${dishIdx}-${n}" value="gold">`;
+            } else {
+                selectHtml = `
+                    <select id="grade-${tabKey}-${dishIdx}-${n}" class="grade-sel" onchange="saveAndCalc()">
+                        <option value="gold" ${isCustomTab ? 'selected' : ''}>금</option>
+                        <option value="silver" ${!isCustomTab ? 'selected' : ''}>은</option>
+                    </select>`;
+            }
             const itemText = `${n}(${q})${selectHtml}`;
             if (allCrops.includes(n)) c.push(itemText); else f.push(itemText);
         });
@@ -574,6 +602,8 @@
         repairSettings[type] = active;
         document.getElementById(`${type}-repair-on`).classList.toggle('active', active);
         document.getElementById(`${type}-repair-off`).classList.toggle('active', !active);
+        
+        localStorage.setItem('luna_repair_settings', JSON.stringify(repairSettings));
         calculate();
     }
 
@@ -611,11 +641,22 @@
             };
 
             if (!dish.name.includes("주스")) {
-                let pN = (dish.type === 'common' ? 69 : 109);
-                let pM = (dish.type === 'common' ? 95 : 167);
-                if (dish.name === '페페스') { priceN = 128; priceM = 200; }
+                let pN = (dish.type === 'common' ? 80 : 171);
+                let pM = (dish.type === 'common' ? 120 : 253);
+                let pS = 274;
+                
+                if (dish.name === '페페스') { 
+                    pN = 196; 
+                    pM = 294; 
+                    pS = 315; 
+                } 
+                
                 updateRow(`store-n-${i}`, calcDishCost('store-n'), pN, repairStore);
                 updateRow(`store-m-${i}`, calcDishCost('store-m'), pM, repairStore);
+
+                if (dish.type === 'uncommon') {
+                    updateRow(`store-s-${i}`, calcDishCost('store-s'), pS, repairStore);
+                }
             }
 
             updateRow(`user-n-${i}`, calcDishCost('user-n'), unformatNumber(document.getElementById(`sell-user-n-${i}`)?.value || 0), repairUser);
@@ -700,6 +741,7 @@
         if(confirm("모든 데이터를 초기화하시겠습니까? (단가 및 시장 데이터 전체 포함)")) {
             localStorage.removeItem('luna_calc_v2');
             localStorage.removeItem('luna_db_v3');
+            localStorage.removeItem('luna_repair_settings');
             location.reload();
         }
     }
