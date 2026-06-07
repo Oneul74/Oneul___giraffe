@@ -519,13 +519,13 @@
         const isFixed = (dish.type === 'uncommon');
         
         let priceN = (dish.type === 'common' ? 80 : 171);
-        let priceM = (dish.type === 'common' ? 120 : 253);
-        let priceS = 274;
+        let priceM = (dish.type === 'common' ? 120 : 240);
+        let priceS = 261;
         
         if (dish.name === '페페스') { 
             priceN = 196; 
-            priceM = 294; 
-            priceS = 315; 
+            priceM = 278; 
+            priceS = 299; 
         }
 
         tbody.innerHTML += `
@@ -642,13 +642,13 @@
 
             if (!dish.name.includes("주스")) {
                 let pN = (dish.type === 'common' ? 80 : 171);
-                let pM = (dish.type === 'common' ? 120 : 253);
-                let pS = 274;
+                let pM = (dish.type === 'common' ? 120 : 240);
+                let pS = 261;
                 
                 if (dish.name === '페페스') { 
                     pN = 196; 
-                    pM = 294; 
-                    pS = 315; 
+                    pM = 278; 
+                    pS = 299; 
                 } 
                 
                 updateRow(`store-n-${i}`, calcDishCost('store-n'), pN, repairStore);
